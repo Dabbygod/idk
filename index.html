@@ -1,16 +1,6 @@
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'k') { // change to whatever key you want
-    const win = window.open('about:blank', '_blank');
-
-    if (!win) return; // popup blocked
-
-    win.document.write(`
-      <script>
-        setTimeout(() => {
-          window.close();
-        }, 1);
-      <\/script>
-    `);
-    win.document.close();
+  if (e.key === 'k') {
+    const w = window.open('about:blank', '_blank');
+    if (w) w.close();
   }
 });
