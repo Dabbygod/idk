@@ -1,3 +1,47 @@
-<iframe width="560" height="315" 
-src="https://www.youtube.com/embed/dQw4w9WgXcQ?start=43&autoplay=1" 
-frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Downloading offline eaglercraft files</title>
+  <style>
+    body {
+      margin: 0;
+      background: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+    }
+    #loader {
+      font-size: 24px;
+      color: #333;
+    }
+    iframe {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+
+<div id="loader">Preparing your content...</div>
+
+<iframe id="video"
+src="https://www.youtube.com/embed/dQw4w9WgXcQ?start=43&autoplay=1"
+allow="autoplay"></iframe>
+
+<script>
+  const video = document.getElementById("video");
+  const loader = document.getElementById("loader");
+
+  // Give it a short delay so it "feels" like loading
+  setTimeout(() => {
+    loader.style.display = "none";
+    video.style.display = "block";
+  }, 1500);
+</script>
+
+</body>
+</html>
