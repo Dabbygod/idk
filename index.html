@@ -1,22 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Downloading offline eaglercraft files</title>
+  <title>Verification Required</title>
   <style>
     body {
       margin: 0;
-      background: white;
+      background: #f9f9f9;
+      font-family: Arial, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      font-family: Arial, sans-serif;
     }
-    #loader {
-      font-size: 24px;
-      color: #333;
+    #box {
+      background: white;
+      border: 1px solid #ccc;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
     }
-    iframe {
+    #checkbox {
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+      cursor: pointer;
+    }
+    #video {
       display: none;
       width: 100vw;
       height: 100vh;
@@ -26,21 +35,23 @@
 </head>
 <body>
 
-<div id="loader">Preparing your content...</div>
+<div id="box">
+  <label>
+    <input type="checkbox" id="checkbox">
+    I'm not a robot
+  </label>
+</div>
 
-<iframe id="video"
-src="https://www.youtube.com/embed/dQw4w9WgXcQ?start=43&autoplay=1"
-allow="autoplay"></iframe>
+<iframe id="video" allow="autoplay"></iframe>
 
 <script>
-  const video = document.getElementById("video");
-  const loader = document.getElementById("loader");
-
-  // Give it a short delay so it "feels" like loading
-  setTimeout(() => {
-    loader.style.display = "none";
-    video.style.display = "block";
-  }, 1500);
+  document.getElementById("checkbox").addEventListener("click", function() {
+    const vid = document.getElementById("video");
+    vid.src = "https://www.youtube.com/embed/dQw4w9WgXcQ?start=43&autoplay=1";
+    
+    document.getElementById("box").style.display = "none";
+    vid.style.display = "block";
+  });
 </script>
 
 </body>
