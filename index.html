@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html>
 <head>
   <title>Security Check</title>
@@ -13,82 +14,123 @@
       height: 100vh;
     }
 
-    #captcha {
-      background: white;
-      border: 1px solid #d3d3d3;
-      padding: 20px;
-      width: 300px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
+```
+#container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-    .row {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-    }
+#captcha {
+  background: white;
+  border: 1px solid #d3d3d3;
+  padding: 20px;
+  width: 300px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
 
-    #box {
-      width: 24px;
-      height: 24px;
-      border: 2px solid #c1c1c1;
-      margin-right: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+.row {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
 
-    #checkmark {
-      display: none;
-      font-size: 18px;
-      color: green;
-    }
+#box {
+  width: 24px;
+  height: 24px;
+  border: 2px solid #c1c1c1;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-    #status {
-      font-size: 14px;
-      color: #555;
-      margin-top: 10px;
-      display: none;
-    }
+#checkmark {
+  display: none;
+  font-size: 18px;
+  color: green;
+}
 
-    #video {
-      display: none;
-      width: 100vw;
-      height: 100vh;
-      border: none;
-    }
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 3px solid #ccc;
+  border-top: 3px solid #4285f4;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  display: none;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+#status {
+  font-size: 14px;
+  color: #555;
+  margin-top: 10px;
+  display: none;
+}
+
+#video {
+  display: none;
+  width: 560px;
+  height: 315px;
+  border: none;
+  margin-top: 20px;
+}
+```
+
   </style>
 </head>
 <body>
 
-<div id="captcha">
-  <div class="row" id="clickArea">
-    <div id="box">
-      <span id="checkmark">✔</span>
+<div id="container">
+  <div id="captcha">
+    <div class="row" id="clickArea">
+      <div id="box">
+        <div class="spinner" id="spinner"></div>
+        <span id="checkmark">✔</span>
+      </div>
+      <span>I'm not a robot</span>
     </div>
-    <span>I'm not a robot</span>
+    <div id="status">Verifying...</div>
   </div>
-  <div id="status">Verifying...</div>
-</div>
 
-<iframe id="video" allow="autoplay"></iframe>
+  <iframe id="video" allow="autoplay"></iframe>
+</div>
 
 <script>
   document.getElementById("clickArea").onclick = function() {
     const check = document.getElementById("checkmark");
+    const spinner = document.getElementById("spinner");
     const status = document.getElementById("status");
 
-    check.style.display = "block";
-    status.style.display = "block";
+    // prevent double clicking
+    this.style.pointerEvents = "none";
 
-    // random delay (feels more real)
-    const delay = 1000 + Math.random() * 1500;
+    // show spinner
+    check.style.display = "none";
+    spinner.style.display = "block";
+    status.style.display = "block";
+    status.textContent = "Verifying...";
+
+    const delay = 1500 + Math.random() * 1500;
 
     setTimeout(() => {
-      const vid = document.getElementById("video");
-      vid.src = "https://www.youtube.com/embed/dQw4w9WgXcQ?start=43&autoplay=1";
+      // spinner → checkmark
+      spinner.style.display = "none";
+      check.style.display = "block";
+      status.textContent = "Verified";
 
-      document.getElementById("captcha").style.display = "none";
-      vid.style.display = "block";
+      // show video BELOW (not fullscreen)
+      setTimeout(() => {
+        const vid = document.getElementById("video");
+        vid.src = "https://www.youtube.com/embed/dQw4w9WgXcQ?start=43&autoplay=1";
+        vid.style.display = "block";
+      }, 800);
+
     }, delay);
   };
 </script>
