@@ -17,6 +17,8 @@
     .container {
       display: flex;
       gap: 30px;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
     .card {
@@ -50,6 +52,17 @@
     <a href="page2.html" class="card">Page 2</a>
     <a href="page3.html" class="card">Page 3</a>
   </div>
+
+  <script>
+    let started = false;
+
+    document.addEventListener('keydown', function(e) {
+      if (!started && e.code === "Space") { // press SPACE
+        started = true;
+        window.location.href = "boot.html";
+      }
+    });
+  </script>
 
 </body>
 </html>
