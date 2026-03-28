@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Booting Game...</title>
+  <meta charset="UTF-8">
+  <!-- auto-redirect after 6 seconds -->
+  <meta http-equiv="refresh" content="6; url=https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+  
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      color: #00ff00;
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding: 20px;
+      line-height: 1.5;
+    }
+
+    .line {
+      opacity: 0;
+      animation: fadeIn 0.3s forwards;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    /* fake selection box */
+    .menu-box {
+      margin-top: 20px;
+      width: 400px; /* horizontal long box */
+      height: 24px;
+      border: 2px solid #00ff00;
+      background: black;
+      display: flex;
+      align-items: center;
+      padding-left: 10px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      animation: fadeIn 0.3s forwards;
+    }
+
+    /* cursor blinking inside box */
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      background-color: #00ff00;
+      margin-left: 5px;
+      animation: blink 0.7s step-start infinite;
+    }
+
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="line" style="animation-delay: 0s;">Initializing system...</div>
+  <div class="line" style="animation-delay: 0.5s;">Loading assets...</div>
+  <div class="line" style="animation-delay: 1s;">Checking memory...</div>
+  <div class="line" style="animation-delay: 1.5s;">CPU OK</div>
+  <div class="line" style="animation-delay: 2s;">GPU OK</div>
+  <div class="line" style="animation-delay: 2.5s;">Launching game menu...</div>
+
+  <!-- fake menu box -->
+  <div class="menu-box" style="animation-delay: 3s;">
+    SELECT GAME <span class="cursor"></span>
+  </div>
+
+</body>
+</html>
