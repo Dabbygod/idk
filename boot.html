@@ -55,11 +55,11 @@
 
 <div id="media" class="hidden">
   <video id="video" controls>
-    <source src="your-video.mp4" type="video/mp4">
+    <source src="media/nvg.mp4" type="video/mp4">
   </video>
 
   <audio id="audio">
-    <source src="nvg.mp3" type="audio/mpeg">
+    <source src="media/nvg.mp3" type="audio/mpeg">
   </audio>
 </div>
 
@@ -115,19 +115,19 @@
     }, 3000);
   }
 
-  function playMedia(choice) {
-    const media = document.getElementById("media");
-    media.classList.remove("hidden");
+function playMedia(choice) {
+  const media = document.getElementById("media");
+  media.classList.remove("hidden");
 
-    if (choice === 0) {
-      const video = document.getElementById("video");
-      video.style.display = "block";
-      video.play();
-    } else {
-      const audio = document.getElementById("audio");
-      audio.play();
-    }
+  if (choice === 0) {
+    const video = document.getElementById("video");
+    video.muted = false; // allow sound
+    video.play();
+  } else {
+    const audio = document.getElementById("audio");
+    audio.play();
   }
+}
 </script>
 
 </body>
