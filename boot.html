@@ -16,9 +16,6 @@
     .menu-item {
       padding: 5px 10px;
       width: 300px;
-    }
-
-    .selected {
       background: #00ff00;
       color: black;
     }
@@ -47,8 +44,7 @@
 <h3>BOOT MENU</h3>
 
 <div id="menu">
-  <div class="menu-item selected">▶ Play Video</div>
-  <div class="menu-item">▶ Play Audio</div>
+  <div class="menu-item">▶ Press ENTER</div>
 </div>
 
 <div id="loadingScreen" class="hidden"></div>
@@ -56,39 +52,18 @@
 <div id="media" class="hidden">
   <video id="video" controls>
     <source src="media/nvg.mp4" type="video/mp4">
+    Your browser does not support the video tag.
   </video>
-
-  <audio id="audio">
-    <source src="media/nvg.mp3" type="audio/mpeg">
-  </audio>
 </div>
 
 <script>
-  const items = document.querySelectorAll(".menu-item");
-  let index = 0;
-
   document.addEventListener("keydown", (e) => {
-    if (document.getElementById("loadingScreen").classList.contains("hidden")) {
-
-      if (e.key === "ArrowDown") {
-        items[index].classList.remove("selected");
-        index = (index + 1) % items.length;
-        items[index].classList.add("selected");
-      }
-
-      if (e.key === "ArrowUp") {
-        items[index].classList.remove("selected");
-        index = (index - 1 + items.length) % items.length;
-        items[index].classList.add("selected");
-      }
-
-      if (e.key === "Enter") {
-        startLoading(index);
-      }
+    if (e.key === "Enter") {
+      startLoading();
     }
   });
 
-  function startLoading(choice) {
+  function startLoading() {
     document.getElementById("menu").classList.add("hidden");
 
     const loading = document.getElementById("loadingScreen");
@@ -111,23 +86,18 @@
 
     setTimeout(() => {
       loading.classList.add("hidden");
-      playMedia(choice);
+      playVideo();
     }, 3000);
   }
 
-function playMedia(choice) {
-  const media = document.getElementById("media");
-  media.classList.remove("hidden");
+  function playVideo() {
+    const media = document.getElementById("media");
+    media.classList.remove("hidden");
 
-  if (choice === 0) {
     const video = document.getElementById("video");
-    video.muted = false; // allow sound
+    video.muted = false;
     video.play();
-  } else {
-    const audio = document.getElementById("audio");
-    audio.play();
   }
-}
 </script>
 
 </body>
