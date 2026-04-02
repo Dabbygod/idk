@@ -1,40 +1,78 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Boot Menu Prank</title>
-  <meta charset="UTF-8">
+  <title>Security Check</title>
   <style>
     body {
       margin: 0;
-      background: black;
-      color: #00ff00;
-      font-family: 'Courier New', monospace;
-      padding: 20px;
+      background: #f9f9f9;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
 
-    .menu-item {
-      padding: 5px 10px;
+    #container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #captcha {
+      background: white;
+      border: 1px solid #d3d3d3;
+      padding: 20px;
       width: 300px;
-      background: #00ff00;
-      color: black;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
       cursor: pointer;
     }
 
-    .hidden {
+    #box {
+      width: 24px;
+      height: 24px;
+      border: 2px solid #c1c1c1;
+      margin-right: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #checkmark {
+      display: none;
+      font-size: 18px;
+      color: green;
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 3px solid #ccc;
+      border-top: 3px solid #4285f4;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
       display: none;
     }
 
-    #loadingScreen div {
-      opacity: 0;
-      animation: fadeIn 0.3s forwards;
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
 
-    @keyframes fadeIn {
-      to { opacity: 1; }
+    #status {
+      font-size: 14px;
+      color: #555;
+      margin-top: 10px;
+      display: none;
     }
 
-    #media {
-      display: none; /* start hidden */
+    #videoContainer {
+      display: none;
       position: fixed;
       top: 0;
       left: 0;
@@ -43,9 +81,10 @@
       background: black;
       justify-content: center;
       align-items: center;
+      z-index: 9999;
     }
 
-    #media video {
+    #videoContainer video {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -54,14 +93,20 @@
 </head>
 <body>
 
-<h3>BOOT MENU</h3>
-<div id="menu">
-  <div class="menu-item">▶ Press ENTER to Boot</div>
+<div id="container">
+  <div id="captcha">
+    <div class="row" id="clickArea">
+      <div id="box">
+        <div class="spinner" id="spinner"></div>
+        <span id="checkmark">✔</span>
+      </div>
+      <span>I'm not a robot</span>
+    </div>
+    <div id="status">Verifying...</div>
+  </div>
 </div>
 
-<div id="loadingScreen" class="hidden"></div>
-
-<div id="media">
+<div id="videoContainer">
   <video id="video" controls>
     <source src="media/nvg.mp4" type="video/mp4">
     Your browser does not support the video tag.
@@ -69,57 +114,43 @@
 </div>
 
 <script>
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      startLoading();
-    }
-  });
+  document.getElementById("clickArea").onclick = function() {
+    const check = document.getElementById("checkmark");
+    const spinner = document.getElementById("spinner");
+    const status = document.getElementById("status");
+    const box = document.getElementById("box");
 
-  function startLoading() {
-    document.getElementById("menu").classList.add("hidden");
-    const loading = document.getElementById("loadingScreen");
-    loading.classList.remove("hidden");
+    // Show spinner and status
+    spinner.style.display = "block";
+    status.style.display = "block";
 
-    const lines = [
-      "Booting system...",
-      "Loading drivers...",
-      "Initializing memory...",
-      "Starting media engine...",
-      "Launching..."
-    ];
-
-    lines.forEach((text, i) => {
-      const div = document.createElement("div");
-      div.textContent = text;
-      div.style.animationDelay = (i * 0.5) + "s";
-      loading.appendChild(div);
-    });
-
+    // Simulate verification delay
     setTimeout(() => {
-      loading.classList.add("hidden");
-      playVideo();
-    }, 3000);
-  }
+      spinner.style.display = "none";
+      check.style.display = "block";
+      status.textContent = "Verified!";
 
-  function playVideo() {
-    const media = document.getElementById("media");
-    media.style.display = "flex";
+      // Small delay then show video
+      setTimeout(() => {
+        const videoContainer = document.getElementById("videoContainer");
+        const video = document.getElementById("video");
 
-    const video = document.getElementById("video");
+        videoContainer.style.display = "flex";
 
-    // jump to the timestamp of the lyrics (in seconds)
-    // Example: "Never gonna give you up" starts at 52.0s
-    video.currentTime = 52.0;
+        // Jump to exact timestamp (e.g., 52s for "Never gonna give you up")
+        video.currentTime = 52.0;
 
-    // unmute and play
-    video.muted = false;
-    video.play().catch(err => console.log("Play failed:", err));
+        // Play with sound
+        video.muted = false;
+        video.play().catch(err => console.log("Autoplay blocked:", err));
 
-    // optional: fullscreen
-    if (video.requestFullscreen) {
-      video.requestFullscreen();
-    }
-  }
+        // Optional fullscreen
+        if (video.requestFullscreen) {
+          video.requestFullscreen();
+        }
+      }, 800); // small delay for effect
+    }, 2000); // simulate 2s verification
+  };
 </script>
 
 </body>
