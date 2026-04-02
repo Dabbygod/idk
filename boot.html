@@ -40,12 +40,13 @@
   width: 100%;
   height: 100%;
   background: black;
+}
 
+#media.active {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-
 video {
   width: 100%;
   height: 100%;
@@ -105,13 +106,14 @@ video {
   }
 
   function playVideo() {
-    const media = document.getElementById("media");
-    media.classList.remove("hidden");
+  const media = document.getElementById("media");
+  media.classList.remove("hidden");
+  media.classList.add("active");
 
-    const video = document.getElementById("video");
-    video.muted = false;
-    video.play();
-  }
+  const video = document.getElementById("video");
+  video.muted = false;
+  video.play();
+}
 </script>
 
 </body>
