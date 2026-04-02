@@ -1,138 +1,125 @@
 <!DOCTYPE html>
-
 <html>
 <head>
-  <title>Security Check</title>
+  <title>Boot Menu Prank</title>
+  <meta charset="UTF-8">
   <style>
     body {
       margin: 0;
-      background: #f9f9f9;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      background: black;
+      color: #00ff00;
+      font-family: 'Courier New', monospace;
+      padding: 20px;
     }
 
-```
-#container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+    .menu-item {
+      padding: 5px 10px;
+      width: 300px;
+      background: #00ff00;
+      color: black;
+      cursor: pointer;
+    }
 
-#captcha {
-  background: white;
-  border: 1px solid #d3d3d3;
-  padding: 20px;
-  width: 300px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
+    .hidden {
+      display: none;
+    }
 
-.row {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
+    #loadingScreen div {
+      opacity: 0;
+      animation: fadeIn 0.3s forwards;
+    }
 
-#box {
-  width: 24px;
-  height: 24px;
-  border: 2px solid #c1c1c1;
-  margin-right: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
 
-#checkmark {
-  display: none;
-  font-size: 18px;
-  color: green;
-}
+    #media {
+      display: none; /* start hidden */
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: black;
+      justify-content: center;
+      align-items: center;
+    }
 
-.spinner {
-  width: 18px;
-  height: 18px;
-  border: 3px solid #ccc;
-  border-top: 3px solid #4285f4;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  display: none;
-}
-
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-#status {
-  font-size: 14px;
-  color: #555;
-  margin-top: 10px;
-  display: none;
-}
-
-#video {
-  display: none;
-  width: 560px;
-  height: 315px;
-  border: none;
-  margin-top: 20px;
-}
-```
-
+    #media video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   </style>
 </head>
 <body>
 
-<div id="container">
-  <div id="captcha">
-    <div class="row" id="clickArea">
-      <div id="box">
-        <div class="spinner" id="spinner"></div>
-        <span id="checkmark">✔</span>
-      </div>
-      <span>I'm not a robot</span>
-    </div>
-    <div id="status">Verifying...</div>
-  </div>
+<h3>BOOT MENU</h3>
+<div id="menu">
+  <div class="menu-item">▶ Press ENTER to Boot</div>
+</div>
 
-  <iframe id="video" allow="autoplay"></iframe>
+<div id="loadingScreen" class="hidden"></div>
+
+<div id="media">
+  <video id="video" controls>
+    <source src="media/nvg.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
 </div>
 
 <script>
-  document.getElementById("clickArea").onclick = function() {
-    const check = document.getElementById("checkmark");
-    const spinner = document.getElementById("spinner");
-    const status = document.getElementById("status");
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      startLoading();
+    }
+  });
 
-    // prevent double clicking
-    this.style.pointerEvents = "none";
+  function startLoading() {
+    document.getElementById("menu").classList.add("hidden");
+    const loading = document.getElementById("loadingScreen");
+    loading.classList.remove("hidden");
 
-    // show spinner
-    check.style.display = "none";
-    spinner.style.display = "block";
-    status.style.display = "block";
-    status.textContent = "Verifying...";
+    const lines = [
+      "Booting system...",
+      "Loading drivers...",
+      "Initializing memory...",
+      "Starting media engine...",
+      "Launching..."
+    ];
 
-    const delay = 1500 + Math.random() * 1500;
+    lines.forEach((text, i) => {
+      const div = document.createElement("div");
+      div.textContent = text;
+      div.style.animationDelay = (i * 0.5) + "s";
+      loading.appendChild(div);
+    });
 
     setTimeout(() => {
-      // spinner → checkmark
-      spinner.style.display = "none";
-      check.style.display = "block";
-      status.textContent = "Verified";
+      loading.classList.add("hidden");
+      playVideo();
+    }, 3000);
+  }
 
-      // show video BELOW (not fullscreen)
-      setTimeout(() => {
-        const vid = document.getElementById("video");
-        vid.src = "https://www.youtube.com/embed/dQw4w9WgXcQ?start=43&autoplay=1";
-        vid.style.display = "block";
-      }, 800);
+  function playVideo() {
+    const media = document.getElementById("media");
+    media.style.display = "flex";
 
-    }, delay);
-  };
+    const video = document.getElementById("video");
+
+    // jump to the timestamp of the lyrics (in seconds)
+    // Example: "Never gonna give you up" starts at 52.0s
+    video.currentTime = 52.0;
+
+    // unmute and play
+    video.muted = false;
+    video.play().catch(err => console.log("Play failed:", err));
+
+    // optional: fullscreen
+    if (video.requestFullscreen) {
+      video.requestFullscreen();
+    }
+  }
 </script>
 
 </body>
