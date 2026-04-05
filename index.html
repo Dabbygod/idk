@@ -15,6 +15,17 @@
       height: 100vh;
     }
 
+    h1 {
+      margin-bottom: 30px;
+      cursor: pointer;
+      color: #333;
+      transition: 0.2s;
+    }
+
+    h1:hover {
+      opacity: 0.7;
+    }
+
     .container {
       display: flex;
       gap: 30px;
@@ -46,8 +57,9 @@
       box-shadow: 0 15px 30px rgba(0,0,0,0.15);
     }
 
-    /* Start button */
-    button {
+    /* Hidden button at start */
+    #startBtn {
+      display: none;
       width: 180px;
       height: 60px;
       border: none;
@@ -60,7 +72,7 @@
       box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     }
 
-    button:hover {
+    #startBtn:hover {
       transform: scale(1.05);
       background: #eaeaea;
     }
@@ -68,14 +80,17 @@
 </head>
 <body>
 
+  <!-- Clickable title -->
+  <h1 onclick="showButton()">Home</h1>
+
   <div class="container">
     <a href="page-files/video1.html" class="card">Video</a>
     <a href="page2.html" class="card">Page 2</a>
     <a href="page3.html" class="card">Page 3</a>
   </div>
 
-  <!-- Mobile-friendly start button -->
-  <button onclick="startBoot()">Start</button>
+  <!-- Hidden button -->
+  <button id="startBtn" onclick="startBoot()">Start</button>
 
   <script>
     let started = false;
@@ -87,7 +102,11 @@
       }
     }
 
-    // Desktop SPACE key
+    function showButton() {
+      document.getElementById("startBtn").style.display = "block";
+    }
+
+    // SPACE key support
     document.addEventListener('keydown', function(e) {
       if (e.code === "Space") {
         startBoot();
