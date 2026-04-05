@@ -11,6 +11,7 @@
       color: #00ff00;
       font-family: 'Courier New', monospace;
       padding: 20px;
+      text-align: center;
     }
 
     .menu-item {
@@ -18,6 +19,7 @@
       width: 300px;
       background: #00ff00;
       color: black;
+      margin: 0 auto 20px auto;
     }
 
     .hidden {
@@ -33,25 +35,40 @@
       to { opacity: 1; }
     }
 
-#media {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: black;
-}
+    /* Button style */
+    button {
+      padding: 10px 20px;
+      background: #00ff00;
+      color: black;
+      border: none;
+      font-family: 'Courier New', monospace;
+      cursor: pointer;
+    }
 
-#media.active {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* fills screen nicely */
-}
+    button:hover {
+      opacity: 0.8;
+    }
+
+    #media {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: black;
+    }
+
+    #media.active {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   </style>
 </head>
 <body>
@@ -59,7 +76,10 @@ video {
 <h3>BOOT MENU</h3>
 
 <div id="menu">
-  <div class="menu-item">▶ Press ENTER</div>
+  <div class="menu-item">▶ Press ENTER or Click Launch </div>
+
+  <!-- NEW BUTTON -->
+  <button onclick="startLoading()">Launch</button>
 </div>
 
 <div id="loadingScreen" class="hidden"></div>
@@ -72,6 +92,8 @@ video {
 </div>
 
 <script>
+  let started = false;
+
   document.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
       startLoading();
@@ -79,14 +101,17 @@ video {
   });
 
   function startLoading() {
+    if (started) return; // prevents double trigger
+    started = true;
+
     document.getElementById("menu").classList.add("hidden");
 
     const loading = document.getElementById("loadingScreen");
     loading.classList.remove("hidden");
 
     const lines = [
-      "Booting system...",
-      "Loading drivers...",
+      "Rebooting system...",
+      "Reloading drivers...",
       "Initializing memory...",
       "Starting media engine...",
       "Launching..."
@@ -106,14 +131,14 @@ video {
   }
 
   function playVideo() {
-  const media = document.getElementById("media");
-  media.classList.remove("hidden");
-  media.classList.add("active");
+    const media = document.getElementById("media");
+    media.classList.remove("hidden");
+    media.classList.add("active");
 
-  const video = document.getElementById("video");
-  video.muted = false;
-  video.play();
-}
+    const video = document.getElementById("video");
+    video.muted = false;
+    video.play();
+  }
 </script>
 
 </body>
