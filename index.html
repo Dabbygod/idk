@@ -1,7 +1,9 @@
+```html
 <!DOCTYPE html>
 <html>
 <head>
   <title>Home</title>
+
   <style>
     body {
       margin: 0;
@@ -57,7 +59,6 @@
       box-shadow: 0 15px 30px rgba(0,0,0,0.15);
     }
 
-    /* Hidden button at start */
     #startBtn {
       display: none;
       width: 180px;
@@ -76,11 +77,45 @@
       transform: scale(1.05);
       background: #eaeaea;
     }
+
+    /* ========================= */
+    /* SECRET OVERLAY */
+    /* ========================= */
+
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: white;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    #lockBox {
+      text-align: center;
+      font-family: monospace;
+    }
+
+    #passInput {
+      font-size: 20px;
+      padding: 10px;
+      width: 250px;
+      text-align: center;
+    }
+
+    #info {
+      margin-top: 10px;
+      color: #555;
+    }
   </style>
 </head>
+
 <body>
 
-  <!-- Clickable title -->
   <h1 onclick="showButton()">Home</h1>
 
   <div class="container">
@@ -89,8 +124,16 @@
     <a href="media/part1 6th grade.mp4" class="card">Page 3</a>
   </div>
 
-  <!-- Hidden button -->
   <button id="startBtn" onclick="startBoot()">Start</button>
+
+  <!-- SECRET PASSCODE OVERLAY -->
+  <div id="overlay">
+    <div id="lockBox">
+      <h2 id="titleText">Enter 4 digits</h2>
+      <input type="text" id="passInput" autofocus>
+      <p id="info">Digits required: 4</p>
+    </div>
+  </div>
 
   <script>
     let started = false;
@@ -106,13 +149,61 @@
       document.getElementById("startBtn").style.display = "block";
     }
 
-    // SPACE key support
     document.addEventListener('keydown', function(e) {
       if (e.code === "Space") {
         startBoot();
+      }
+    });
+
+    // =========================
+    // SECRET PASSCODE SYSTEM
+    // =========================
+
+    const pi = "314159265358979323846264338327950288419716939937510";
+
+    const START_LENGTH = 4;
+    let requiredLength = START_LENGTH;
+
+    const overlay = document.getElementById("overlay");
+    const input = document.getElementById("passInput");
+    const info = document.getElementById("info");
+    const title = document.getElementById("titleText");
+
+    // Open overlay with "B"
+    document.addEventListener("keydown", function(e) {
+      if (e.key.toLowerCase() === "b") {
+        overlay.style.display = "flex";
+        input.value = "";
+        input.focus();
+      }
+    });
+
+    // Check input
+    input.addEventListener("input", function() {
+      const value = input.value;
+
+      if (pi.startsWith(value)) {
+        if (value.length === requiredLength) {
+          // SUCCESS
+          overlay.style.display = "none";
+          requiredLength = START_LENGTH;
+
+          input.value = "";
+          info.textContent = "Digits required: " + START_LENGTH;
+          title.textContent = "Enter first " + START_LENGTH + " digits of π";
+        }
+      } else {
+        // WRONG → increase difficulty 😈
+        requiredLength++;
+
+        info.textContent = "Digits required: " + requiredLength;
+        title.textContent = "Enter first " + requiredLength + " digits of π";
+
+        input.value = "";
       }
     });
   </script>
 
 </body>
 </html>
+```
