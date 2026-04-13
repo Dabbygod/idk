@@ -1,59 +1,210 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Video Player</title>
-
+  <title>Phantom</title>
+  <meta charset="UTF-8">
   <style>
     body {
-      background-color: Honeydew;
       margin: 0;
+      background: BlanchedAlmond;
+      color: #000000;
       font-family: Arial, sans-serif;
-      text-align: center;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
     }
 
-    .container {
-      margin-top: 40px;
+    .line {
+      opacity: 0;
+      animation: fadeIn 0.3s forwards;
     }
 
-    video {
-      width: 80%;
-      max-width: 900px;
-      height: auto;
-      border: 2px solid black;
-      border-radius: 10px;
+    @keyframes fadeIn {
+      to { opacity: 1; }
     }
 
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
+    #menu, #captcha, #videoContainer {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #menu .menu-item {
+      padding: 5px 10px;
+      background: #ffffff;
+      color: black;
+      width: 300px;
+      margin: 5px 0;
       cursor: pointer;
-      margin-bottom: 15px;
     }
+
+    #captcha {
+      background: #111;
+      border: 2px solid #00ff00;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    #captcha .row {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      color: #ffffff;
+    }
+
+    #box {
+      width: 24px;
+      height: 24px;
+      border: 2px solid #00ff00;
+      margin-right: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #checkmark {
+      display: none;
+      font-size: 18px;
+      color: #000000;
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 3px solid #00ff00;
+      border-top: 3px solid black;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    #videoContainer {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: black;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    #videoContainer iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* 👻 Phantom image (top-left) */
+    #phantomOverlay {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      width: 120px;
+      height: auto;
+      z-index: 1000;
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
   </style>
 </head>
-
 <body>
 
-<div class="container">
-  <button onclick="playPause()">Play / Pause</button>
-  <br>
+  <!-- 👻 Phantom always visible -->
+  <img id="phantomOverlay" src="media/phantom.png">
 
-  <video id="video1">
-    <source src="https://dabbygod.github.io/idk/media/67.mp4" type="video/mp4">
-    Your browser does not support HTML video.
-  </video>
-</div>
+  <!-- Boot Screen -->
+  <div id="bootScreen">
+    <div class="line" style="animation-delay:0s">Initializing system...</div>
+    <div class="line" style="animation-delay:0.5s">Loading drivers...</div>
+    <div class="line" style="animation-delay:1s">Checking memory...</div>
+    <div class="line" style="animation-delay:1.5s">CPU OK</div>
+    <div class="line" style="animation-delay:2s">GPU OK</div>
+    <div class="line" style="animation-delay:2.5s">Starting security check...</div>
+  </div>
+
+  <!-- Menu -->
+  <div id="menu">
+    <div class="menu-item" id="proceed">▶ Proceed</div>
+  </div>
+
+  <!-- Captcha -->
+  <div id="captcha">
+    <div class="row" id="clickArea">
+      <div id="box">
+        <div class="spinner" id="spinner"></div>
+        <span id="checkmark">✔</span>
+      </div>
+      <span>I'm not a robot</span>
+    </div>
+    <div id="status" style="color:#00ff00; margin-top:10px; display:none;">Verifying...</div>
+  </div>
+
+  <!-- Video -->
+  <div id="videoContainer">
+    <iframe id="ytVideo" allow="autoplay; fullscreen"></iframe>
+  </div>
 
 <script>
-  var myVideo = document.getElementById("video1");
+  // Boot → Menu
+  setTimeout(() => {
+    document.getElementById("bootScreen").style.display = "none";
+    document.getElementById("menu").style.display = "flex";
+  }, 3500);
 
-  function playPause() {
-    if (myVideo.paused) {
-      myVideo.play();
-    } else {
-      myVideo.pause();
-    }
-  }
+  // Menu → Captcha
+  document.getElementById("proceed").onclick = function() {
+    document.getElementById("menu").style.display = "none";
+    document.getElementById("captcha").style.display = "flex";
+  };
+
+  // Captcha click
+  document.getElementById("clickArea").onclick = function() {
+    const check = document.getElementById("checkmark");
+    const spinner = document.getElementById("spinner");
+    const status = document.getElementById("status");
+
+    spinner.style.display = "block";
+    status.style.display = "block";
+
+    setTimeout(() => {
+      spinner.style.display = "none";
+      check.style.display = "block";
+      status.textContent = "Verified!";
+
+      setTimeout(() => {
+        const videoContainer = document.getElementById("videoContainer");
+        const ytVideo = document.getElementById("ytVideo");
+        const phantomOverlay = document.getElementById("phantomOverlay");
+
+        document.getElementById("captcha").style.display = "none";
+
+        // 👻 Hide phantom BEFORE video
+        phantomOverlay.style.display = "none";
+
+        // Show video
+        videoContainer.style.display = "flex";
+
+        ytVideo.src = "https://www.youtube.com/embed/dQw4w9WgXcQ?start=49&autoplay=1&controls=0";
+
+        if (videoContainer.requestFullscreen) {
+          videoContainer.requestFullscreen();
+        }
+
+      }, 800);
+    }, 2000);
+  };
 </script>
 
 </body>
