@@ -104,11 +104,19 @@
       height: 100%;
       border: none;
     }
+    iframe {
+    display: block;       /* Makes it a block element */
+    margin: 0;            /* No margin so it sticks to the edges */
+    border: none;         /* Removes border */
+    position: absolute;   /* Allows precise positioning */
+    top: 0;               /* Align to top */
+    left: 0;              /* Align to left */
+}
 
   </style>
 </head>
 <body>
-
+<iframe src="phantom.png" height="400" width="600"</iframe>
   <!-- Boot lines -->
   <div id="bootScreen">
     <div class="line" style="animation-delay:0s">Initializing system...</div>
